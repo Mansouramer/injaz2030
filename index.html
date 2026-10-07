@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b2230">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="شواهد العلوم">
+<title>ملف الشواهد | المعلم منصور عامر الرحيلي</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Amiri:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#07141f; --deep:#0b2230; --panel:#0f2d3d; --line:#1f4658;
+  --gold:#d4af5f; --gold2:#f0d58f; --emerald:#1aa37a; --ivory:#f6f0e0; --mute:#9fb6c0;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Tajawal',Tahoma,sans-serif;background:var(--ink);color:var(--ivory);min-height:100vh;
+  background-image:radial-gradient(900px 500px at 85% -10%,rgba(26,163,122,.18),transparent 60%),radial-gradient(700px 500px at 0% 30%,rgba(212,175,95,.10),transparent 60%)}
+button,input,textarea{font-family:inherit;font-size:1rem;color:inherit}
+:focus-visible{outline:3px solid var(--gold2);outline-offset:2px}
+
+/* Top nav */
+.top{position:sticky;top:0;z-index:15;display:flex;gap:.7rem;align-items:center;padding:.8rem 1.5rem;background:rgba(7,20,31,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);overflow-x:auto}
+.top>*{flex-shrink:0}
+.dash{display:flex;align-items:center;gap:.6rem;background:linear-gradient(135deg,var(--gold2),var(--gold) 60%,#b8923f);color:#1a1405;border:0;border-radius:16px;padding:.7rem 1.3rem;cursor:pointer;font-weight:800;font-size:1.1rem;box-shadow:0 8px 24px -10px rgba(212,175,95,.8);transition:transform .2s}
+.dash:hover{transform:translateY(-2px)}
+.dash span{font-size:1.4rem}
+.dset{background:none;border:1px solid var(--line);border-radius:12px;width:40px;height:40px;cursor:pointer;color:var(--mute)}
+.dset:hover{border-color:var(--gold);color:var(--gold2)}
+.qi{display:flex;align-items:center;gap:.6rem;background:var(--deep);border:1px solid var(--line);border-radius:16px;padding:.5rem 1rem .5rem 1.1rem;cursor:pointer;font-weight:700;transition:.2s}
+.qi:hover{border-color:var(--gold);color:var(--gold2)}
+.qi i{font-style:normal;font-size:1.4rem;width:40px;height:40px;display:grid;place-items:center;border-radius:12px;background:rgba(26,163,122,.18)}
+.gt{grid-column:1/-1;font-family:'Amiri',serif;color:var(--gold2);font-size:1.5rem;margin-top:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--line)}
+.info-text{white-space:pre-wrap;line-height:2.1;font-size:1.1rem;color:var(--ivory);background:var(--ink);border:1px solid var(--line);border-radius:18px;padding:1.2rem}
+.info-note{color:var(--mute);font-size:.9rem;margin-top:.8rem}
+.info-actions{display:flex;gap:.6rem;margin-top:1rem}
+#ie{min-height:260px}
+.inst{display:flex;align-items:center;gap:.5rem;background:var(--deep);border:1px solid var(--emerald);color:#7be0bf;border-radius:16px;padding:.7rem 1.1rem;cursor:pointer;font-weight:700;transition:.2s}
+.inst:hover{background:var(--emerald);color:#04150f}
+.inst[hidden]{display:none}
+/* Hero */
+.hero{display:grid;grid-template-columns:1.3fr 1fr;gap:2rem;align-items:center;max-width:1200px;margin:0 auto;padding:3rem 1.5rem 2rem}
+.badge{display:inline-block;border:1px solid var(--gold);color:var(--gold2);padding:.3rem 1rem;border-radius:99px;font-size:.95rem;margin-bottom:1rem}
+.hero h1{font-family:'Amiri',serif;font-size:clamp(2.2rem,5vw,3.8rem);line-height:1.25;color:var(--gold2)}
+.hero h2{font-size:clamp(1.2rem,2.5vw,1.6rem);font-weight:500;margin:.6rem 0 1.2rem;color:var(--ivory)}
+.hero p{color:var(--mute);max-width:46ch;line-height:1.9}
+.atom{width:100%;max-width:340px;margin:auto;display:block}
+.orbit{transform-origin:150px 150px;animation:spin 18s linear infinite}
+.orbit.b{animation-duration:26s;animation-direction:reverse}
+.orbit.c{animation-duration:34s}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Stats */
+.stats{max-width:1200px;margin:0 auto;padding:0 1.5rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.stat{background:linear-gradient(160deg,var(--panel),var(--deep));border:1px solid var(--line);border-radius:18px;padding:1.2rem 1.4rem}
+.stat b{display:block;font-size:2.2rem;color:var(--gold2);font-weight:800}
+.stat span{color:var(--mute)}
+.bar{height:8px;background:#0a1c27;border-radius:9px;margin-top:.6rem;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--emerald),var(--gold));border-radius:9px;transition:width .6s}
+
+/* Toolbar */
+.tools{max-width:1200px;margin:2rem auto 1rem;padding:0 1.5rem;display:flex;flex-wrap:wrap;gap:.7rem;align-items:center}
+.tools input[type=search]{flex:1;min-width:200px;background:var(--deep);border:1px solid var(--line);border-radius:14px;padding:.8rem 1.1rem}
+.btn{background:var(--deep);border:1px solid var(--line);border-radius:14px;padding:.75rem 1.1rem;cursor:pointer;transition:.2s}
+.btn:hover{border-color:var(--gold);color:var(--gold2)}
+.btn.gold{background:linear-gradient(135deg,var(--gold),#b8923f);color:#1a1405;border:0;font-weight:700}
+.btn.gold:hover{filter:brightness(1.1);color:#1a1405}
+.btn.danger:hover{border-color:#e0626b;color:#e0626b}
+
+/* Grid */
+.grid{max-width:1200px;margin:0 auto;padding:0 1.5rem 3rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1.1rem}
+.card{position:relative;text-align:right;background:linear-gradient(165deg,var(--panel),var(--deep));border:1px solid var(--line);border-radius:22px;padding:1.4rem;cursor:pointer;transition:transform .25s,border-color .25s,box-shadow .25s;overflow:hidden}
+.card::after{content:"";position:absolute;inset-inline-start:0;top:0;bottom:0;width:4px;background:var(--c,var(--gold))}
+.card:hover{transform:translateY(-5px);border-color:var(--gold);box-shadow:0 18px 40px -18px rgba(212,175,95,.45)}
+.ico{font-size:2rem;width:58px;height:58px;display:grid;place-items:center;border-radius:16px;background:rgba(255,255,255,.05);margin-bottom:.9rem}
+.card h3{font-size:1.15rem;line-height:1.5;margin-bottom:.4rem}
+.card small{color:var(--mute)}
+.cnt{position:absolute;top:1.2rem;inset-inline-end:1.2rem;min-width:34px;height:34px;padding:0 .5rem;border-radius:99px;display:grid;place-items:center;background:var(--gold);color:#1a1405;font-weight:800}
+.cnt.zero{background:transparent;border:1px dashed var(--mute);color:var(--mute)}
+
+/* Modal */
+.modal{position:fixed;inset:0;background:rgba(3,10,16,.8);backdrop-filter:blur(6px);display:none;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow:auto;z-index:20}
+.modal.open{display:flex}
+.sheet{width:min(920px,100%);background:var(--deep);border:1px solid var(--gold);border-radius:26px;padding:1.6rem;animation:pop .3s ease}
+@keyframes pop{from{opacity:0;transform:translateY(20px) scale(.97)}}
+.sh-head{display:flex;justify-content:space-between;gap:1rem;align-items:center;margin-bottom:1.2rem}
+.sh-head h2{font-family:'Amiri',serif;color:var(--gold2);font-size:1.7rem}
+.x{background:none;border:1px solid var(--line);border-radius:12px;width:42px;height:42px;cursor:pointer;font-size:1.2rem}
+.x:hover{border-color:var(--gold)}
+form{display:grid;gap:.7rem;background:var(--ink);border:1px solid var(--line);border-radius:18px;padding:1.1rem;margin-bottom:1.3rem}
+form .row{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+label{font-size:.9rem;color:var(--mute);display:block;margin-bottom:.25rem}
+input[type=text],input[type=url],input[type=date],textarea{width:100%;background:var(--deep);border:1px solid var(--line);border-radius:12px;padding:.7rem .9rem}
+textarea{min-height:80px;resize:vertical}
+input[type=file]{color:var(--mute)}
+.ev-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1rem}
+.ev{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+.ev img{width:100%;height:160px;object-fit:cover;cursor:zoom-in}
+.ev div{padding:.9rem;display:flex;flex-direction:column;gap:.4rem;flex:1}
+.ev h4{color:var(--gold2)}
+.ev p{color:var(--mute);font-size:.95rem;line-height:1.7}
+.ev .meta{display:flex;justify-content:space-between;align-items:center;margin-top:auto;font-size:.85rem;color:var(--mute)}
+.ev a{color:var(--emerald)}
+.ev button{background:none;border:0;color:#e0626b;cursor:pointer}
+.empty{grid-column:1/-1;text-align:center;color:var(--mute);padding:2rem;border:1px dashed var(--line);border-radius:18px}
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:var(--gold);color:#1a1405;padding:.7rem 1.4rem;border-radius:99px;font-weight:700;opacity:0;pointer-events:none;transition:.3s;z-index:40}
+.toast.show{opacity:1}
+footer{text-align:center;color:var(--mute);padding:2rem 1rem 3rem;border-top:1px solid var(--line)}
+footer b{color:var(--gold2)}
+
+@media(max-width:760px){.hero{grid-template-columns:1fr;text-align:center}.hero p{margin:auto}.stats{grid-template-columns:1fr}form .row{grid-template-columns:1fr}.atom{max-width:220px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{.top,.tools,.btn,.x,form,.atom{display:none!important}body{background:#fff;color:#000}.card,.ev,.sheet,.stat{background:#fff;border-color:#999;color:#000}}
+</style>
+</head>
+<body>
+
+<nav class="top" aria-label="التنقل السريع">
+  <button class="dash" id="dash" title="فتح الداش بورد"><span>🧭</span>الداش بورد</button>
+  <button class="dset" id="dashSet" title="تغيير رابط الداش بورد" aria-label="تغيير رابط الداش بورد">⚙</button>
+  <button class="inst" id="inst" title="تثبيت التطبيق على الشاشة الرئيسية">📲 تثبيت التطبيق</button>
+  <button class="qi" data-info="vision"><i>👁️</i>الرؤية</button>
+  <button class="qi" data-info="mission"><i>🎯</i>الرسالة</button>
+  <button class="qi" data-info="goals"><i>🇸🇦</i>الأهداف العامة للتعليم</button>
+</nav>
+
+<header class="hero">
+  <div>
+    <span class="badge">ملف الإنجاز والشواهد · العلوم</span>
+    <h1>المعلم منصور عامر الرحيلي</h1>
+    <h2>معلم مادة العلوم</h2>
+    <p>أرشيف رقمي تفاعلي يجمع شواهد الأداء الوظيفي. افتح أي قسم، وأضف الصور والروابط والتفاصيل، وستُحفظ تلقائيًا على جهازك.</p>
+  </div>
+  <svg class="atom" viewBox="0 0 300 300" aria-hidden="true">
+    <defs><radialGradient id="g" cx="50%" cy="40%"><stop offset="0" stop-color="#f0d58f"/><stop offset="1" stop-color="#b8923f"/></radialGradient></defs>
+    <g fill="none" stroke="#d4af5f" stroke-opacity=".55" stroke-width="1.5">
+      <ellipse class="orbit" cx="150" cy="150" rx="125" ry="45"/>
+      <ellipse class="orbit b" cx="150" cy="150" rx="125" ry="45" transform="rotate(60 150 150)"/>
+      <ellipse class="orbit c" cx="150" cy="150" rx="125" ry="45" transform="rotate(120 150 150)"/>
+    </g>
+    <circle cx="150" cy="150" r="22" fill="url(#g)"/>
+    <circle cx="275" cy="150" r="8" fill="#1aa37a"><animateTransform attributeName="transform" type="rotate" from="0 150 150" to="360 150 150" dur="9s" repeatCount="indefinite"/></circle>
+    <circle cx="87" cy="42" r="7" fill="#f0d58f"><animateTransform attributeName="transform" type="rotate" from="0 150 150" to="-360 150 150" dur="13s" repeatCount="indefinite"/></circle>
+  </svg>
+</header>
+
+<section class="stats" aria-label="ملخص">
+  <div class="stat"><b id="sEv">0</b><span>إجمالي الشواهد</span></div>
+  <div class="stat"><b id="sSec">0 / 0</b><span>أقسام مكتملة (بها شاهد على الأقل)</span></div>
+  <div class="stat"><b id="sPct">0%</b><span>نسبة الإنجاز</span><div class="bar"><i id="bar"></i></div></div>
+</section>
+
+<div class="tools">
+  <input type="search" id="q" placeholder="ابحث في الأقسام والشواهد…" aria-label="بحث">
+  <button class="btn" id="exp">حفظ نسخة احتياطية</button>
+  <button class="btn" id="impBtn">استرجاع نسخة</button>
+  <input type="file" id="imp" accept=".json" hidden>
+  <button class="btn" onclick="print()">طباعة</button>
+  <button class="btn danger" id="reset">مسح الكل</button>
+</div>
+
+<main class="grid" id="grid"></main>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mt">
+  <div class="sheet">
+    <div class="sh-head"><h2 id="mt"></h2><button class="x" id="close" aria-label="إغلاق">✕</button></div>
+    <form id="form">
+      <div class="row">
+        <div><label for="fT">عنوان الشاهد</label><input type="text" id="fT" required></div>
+        <div><label for="fD">التاريخ</label><input type="date" id="fD"></div>
+      </div>
+      <div><label for="fDesc">وصف الشاهد</label><textarea id="fDesc"></textarea></div>
+      <div class="row">
+        <div><label for="fL">رابط (اختياري)</label><input type="url" id="fL" placeholder="https://"></div>
+        <div><label for="fI">صورة (اختياري)</label><input type="file" id="fI" accept="image/*"></div>
+      </div>
+      <button class="btn gold" type="submit">إضافة الشاهد</button>
+    </form>
+    <div class="ev-list" id="evs"></div>
+  </div>
+</div>
+
+<div class="modal" id="info" role="dialog" aria-modal="true" aria-labelledby="it">
+  <div class="sheet">
+    <div class="sh-head"><h2 id="it"></h2><button class="x" id="iClose" aria-label="إغلاق">✕</button></div>
+    <div class="info-text" id="iv"></div>
+    <textarea id="ie" hidden></textarea>
+    <p class="info-note" id="iNote"></p>
+    <div class="info-actions">
+      <button class="btn" id="iEdit">تعديل النص</button>
+      <button class="btn gold" id="iSave" hidden>حفظ</button>
+    </div>
+  </div>
+</div>
+
+<footer>إعداد وتصميم: <b>المعلم منصور عامر الرحيلي</b> · معلم العلوم</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+const SECTIONS=[
+ {id:"s1",g:0,t:"أداء الواجبات الوظيفية",i:"📋"},
+ {id:"s2",g:0,t:"التفاعل مع المجتمع المهني",i:"🤝"},
+ {id:"s3",g:0,t:"التفاعل مع أولياء الأمور",i:"👨‍👩‍👧"},
+ {id:"s4",g:0,t:"التنويع في استراتيجيات التدريس",i:"🔬"},
+ {id:"s5",g:0,t:"تحسين نتائج المتعلمين",i:"📈"},
+ {id:"s6",g:0,t:"إعداد وتنفيذ خطة التعلم",i:"🗂️"},
+ {id:"s7",g:0,t:"توظيف تقنيات ووسائل التعلم المناسبة",i:"💻"},
+ {id:"s8",g:0,t:"تهيئة بيئة تعليمية",i:"🧪"},
+ {id:"s9",g:0,t:"الإدارة الصفية",i:"🏫"},
+ {id:"s10",g:0,t:"تحليل نتائج المتعلمين وتشخيص مستواهم",i:"📊"},
+ {id:"s11",g:0,t:"تنوع أساليب التقويم",i:"✅"},
+ {id:"s12",g:1,t:"الخطط العلاجية",i:"🩺"},
+ {id:"s13",g:1,t:"الاختبارات",i:"📝"},
+ {id:"s14",g:1,t:"أعمال الطلاب",i:"🎨"},
+ {id:"s15",g:1,t:"أوراق العمل",i:"📄"},
+ {id:"s16",g:1,t:"الشهادات",i:"🏅"},
+ {id:"s17",g:1,t:"الدورات",i:"🎓"},
+ {id:"s18",g:1,t:"جدول الحصص",i:"🗓️"},
+ {id:"s19",g:1,t:"توزيع المنهج",i:"📚"},
+ {id:"s20",g:1,t:"سجل المتابعة",i:"📒"},
+ {id:"s21",g:1,t:"خرائط المفاهيم",i:"🧠"}
+];
+const GROUPS=["معايير الأداء الوظيفي","الملفات والشواهد الداعمة"];
+const KEY="rahili_science_portfolio_v1";
+let data={};try{data=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
+let cur=null;
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+function save(){try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){toast("المساحة ممتلئة؛ احذف بعض الصور أو احفظ نسخة احتياطية")}}
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2400)}
+
+function render(){
+  const q=$("#q").value.trim();
+  let html="";
+  GROUPS.forEach((gt,gi)=>{
+    const list=SECTIONS.filter(s=>s.g===gi&&(!q||s.t.includes(q)||(data[s.id]||[]).some(e=>(e.t+e.d).includes(q))));
+    if(!list.length)return;
+    html+=`<h2 class="gt">${gt}</h2>`+list.map((s,k)=>{
+      const n=(data[s.id]||[]).length;
+      return `<button class="card" style="--c:${k%2?"#1aa37a":"#d4af5f"}" data-id="${s.id}">
+        <span class="cnt ${n?"":"zero"}">${n}</span>
+        <div class="ico">${s.i}</div><h3>${s.t}</h3>
+        <small>${n?"عرض الشواهد وإضافة المزيد":"افتح القسم لإضافة أول شاهد"}</small></button>`}).join("");
+  });
+  $("#grid").innerHTML=html||`<div class="empty">لا توجد نتائج مطابقة</div>`;
+  const total=SECTIONS.reduce((a,s)=>a+(data[s.id]||[]).length,0);
+  const done=SECTIONS.filter(s=>(data[s.id]||[]).length).length;
+  const pct=Math.round(done/SECTIONS.length*100);
+  $("#sEv").textContent=total;$("#sSec").textContent=done+" / "+SECTIONS.length;
+  $("#sPct").textContent=pct+"%";$("#bar").style.width=pct+"%";
+}
+function openSec(id){
+  cur=SECTIONS.find(s=>s.id===id);
+  $("#mt").textContent=cur.i+" "+cur.t;
+  $("#form").reset();$("#fD").valueAsDate=new Date();
+  drawEv();$("#modal").classList.add("open");document.body.style.overflow="hidden";
+  setTimeout(()=>$("#fT").focus(),50);
+}
+function closeM(){$("#modal").classList.remove("open");document.body.style.overflow="";render()}
+function drawEv(){
+  const arr=data[cur.id]||[];
+  $("#evs").innerHTML=arr.map((e,i)=>`<article class="ev">
+    ${e.img?`<img src="${e.img}" alt="${esc(e.t)}" onclick="zoom(${i})">`:""}
+    <div><h4>${esc(e.t)}</h4><p>${esc(e.d)}</p>
+    <div class="meta" style="padding:0"><span>${esc(e.date||"")}</span>
+    ${e.l?`<a href="${esc(e.l)}" target="_blank" rel="noopener">فتح الرابط</a>`:""}
+    <button onclick="del(${i})">حذف</button></div></div></article>`).join("")
+    ||`<div class="empty">لا توجد شواهد بعد. أضف أول شاهد من النموذج أعلاه.</div>`;
+}
+function zoom(i){const w=open();w&&(w.document.write(`<body style="margin:0;background:#000"><img src="${data[cur.id][i].img}" style="max-width:100%;display:block;margin:auto">`))}
+function del(i){if(!confirm("حذف هذا الشاهد؟"))return;data[cur.id].splice(i,1);save();drawEv();toast("تم الحذف")}
+
+function shrink(file){return new Promise(res=>{
+  const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{
+    const k=Math.min(1,900/Math.max(im.width,im.height));
+    const c=document.createElement("canvas");c.width=im.width*k;c.height=im.height*k;
+    c.getContext("2d").drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",.72))};
+    im.onerror=()=>res("");im.src=r.result};r.readAsDataURL(file)})}
+
+$("#form").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const f=$("#fI").files[0];
+  const item={t:$("#fT").value.trim(),d:$("#fDesc").value.trim(),l:$("#fL").value.trim(),date:$("#fD").value,img:f?await shrink(f):""};
+  (data[cur.id]=data[cur.id]||[]).unshift(item);save();
+  $("#form").reset();$("#fD").valueAsDate=new Date();drawEv();toast("تمت إضافة الشاهد");
+});
+$("#grid").addEventListener("click",e=>{const c=e.target.closest(".card");if(c)openSec(c.dataset.id)});
+$("#close").onclick=closeM;
+$("#modal").addEventListener("click",e=>{if(e.target.id==="modal")closeM()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeM()});
+$("#q").oninput=render;
+$("#exp").onclick=()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(data)],{type:"application/json"}));a.download="شواهد-الرحيلي.json";a.click();toast("تم حفظ النسخة الاحتياطية")};
+$("#impBtn").onclick=()=>$("#imp").click();
+$("#imp").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{data=JSON.parse(r.result);save();render();toast("تم الاسترجاع")}catch(x){toast("الملف غير صالح")}};r.readAsText(f)};
+$("#reset").onclick=()=>{if(confirm("سيتم حذف جميع الشواهد من هذا الجهاز. هل أنت متأكد؟")){data={};save();render()}};
+/* الرؤية والرسالة والأهداف */
+const INFO={
+ vision:{t:"👁️ الرؤية",d:"أن أكون معلم علوم متميزًا يصنع جيلًا محبًّا للعلم، قادرًا على البحث والاكتشاف والابتكار، بما يتوافق مع رؤية المملكة 2030.",n:"نص افتراضي، اضغط «تعديل النص» لوضع رؤيتك."},
+ mission:{t:"🎯 الرسالة",d:"تقديم تعليم علوم قائم على الاستقصاء والتجريب وتوظيف التقنية، يراعي الفروق الفردية، ويرسخ القيم الإسلامية والهوية الوطنية، وينمّي مهارات التفكير والتعلم الذاتي لدى الطلاب.",n:"نص افتراضي، اضغط «تعديل النص» لوضع رسالتك."},
+ goals:{t:"🇸🇦 الأهداف العامة للتعليم في المملكة العربية السعودية",d:"• ترسيخ العقيدة الإسلامية وغرس القيم والأخلاق الحميدة في نفوس الطلاب.\n• تنمية الانتماء للوطن والاعتزاز بالهوية الوطنية واللغة العربية.\n• تزويد الطالب بالمعارف والمهارات الأساسية في مختلف العلوم والتقنية.\n• تنمية مهارات التفكير العلمي والبحث والتعلم الذاتي.\n• اكتشاف الموهوبين ورعايتهم، ومراعاة الفروق الفردية بين الطلاب.\n• تشجيع الإبداع والابتكار وتوظيف التقنية في التعلم.\n• إعداد الطالب لسوق العمل والمشاركة الفاعلة في خدمة المجتمع وتنمية الوطن.",n:"ملخص عام للأهداف. يُفضّل استبداله بالنص الرسمي من وثيقة سياسة التعليم عبر «تعديل النص»."}
+};
+let infoKey=null;
+const infoText=k=>(data._info&&data._info[k])||INFO[k].d;
+function openInfo(k){
+  infoKey=k;$("#it").textContent=INFO[k].t;$("#iv").textContent=infoText(k);
+  $("#iNote").textContent=(data._info&&data._info[k])?"":INFO[k].n;
+  $("#iv").hidden=false;$("#ie").hidden=true;$("#iEdit").hidden=false;$("#iSave").hidden=true;
+  $("#info").classList.add("open");document.body.style.overflow="hidden";
+}
+function closeInfo(){$("#info").classList.remove("open");if(!$("#modal").classList.contains("open"))document.body.style.overflow=""}
+document.querySelectorAll(".qi").forEach(b=>b.onclick=()=>openInfo(b.dataset.info));
+$("#iClose").onclick=closeInfo;
+$("#info").addEventListener("click",e=>{if(e.target.id==="info")closeInfo()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeInfo()});
+$("#iEdit").onclick=()=>{$("#ie").value=infoText(infoKey);$("#iv").hidden=true;$("#ie").hidden=false;$("#iEdit").hidden=true;$("#iSave").hidden=false;$("#ie").focus()};
+$("#iSave").onclick=()=>{data._info=data._info||{};data._info[infoKey]=$("#ie").value.trim()||INFO[infoKey].d;save();openInfo(infoKey);toast("تم حفظ النص")};
+
+/* رابط الداش بورد: ضع رابطك هنا، أو اضغط زر ⚙ بجانب الأيقونة */
+const DASHBOARD_URL="";
+function dashUrl(){let v=null;try{v=localStorage.getItem("rahili_dash")}catch(e){}return v||DASHBOARD_URL}
+function setDash(){
+  const u=prompt("الصق رابط الداش بورد (يبدأ بـ https://)",dashUrl()||"");
+  if(!u)return "";
+  const t=u.trim();
+  if(!/^https?:\/\//i.test(t)){toast("الرابط غير صالح");return ""}
+  try{localStorage.setItem("rahili_dash",t)}catch(e){}
+  toast("تم حفظ الرابط");return t;
+}
+$("#dash").onclick=()=>{const u=dashUrl()||setDash();if(u)window.open(u,"_blank","noopener")};
+$("#dashSet").onclick=setDash;
+/* تثبيت التطبيق (PWA) */
+let deferred=null;
+const standalone=()=>matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+if(standalone())$("#inst").hidden=true;
+addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferred=e});
+addEventListener("appinstalled",()=>{deferred=null;$("#inst").hidden=true;toast("تم تثبيت التطبيق بنجاح")});
+$("#inst").onclick=async()=>{
+  if(deferred){deferred.prompt();await deferred.userChoice;deferred=null;return}
+  const ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
+  $("#it").textContent="📲 تثبيت التطبيق";
+  $("#iv").textContent=ios
+   ?"على الآيفون والآيباد (متصفح Safari):\n1) اضغط زر المشاركة ⬆️ أسفل الشاشة.\n2) اختر «إضافة إلى الشاشة الرئيسية».\n3) اضغط «إضافة».":
+    "على أندرويد (Chrome): اضغط قائمة ⋮ ثم «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».\nعلى الكمبيوتر (Chrome / Edge): اضغط أيقونة التثبيت في شريط العنوان، أو القائمة ثم «تثبيت».\nملاحظة: يعمل التثبيت عند فتح الصفحة من رابط https (مثل رابط GitHub Pages).";
+  $("#iv").hidden=false;$("#ie").hidden=true;$("#iEdit").hidden=true;$("#iSave").hidden=true;$("#iNote").textContent="";
+  $("#info").classList.add("open");document.body.style.overflow="hidden";
+};
+if("serviceWorker" in navigator&&location.protocol.startsWith("http")){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))}
+render();
+</script>
+</body>
+</html>
