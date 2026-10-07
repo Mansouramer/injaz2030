@@ -98,15 +98,24 @@ label{font-size:.9rem;color:var(--mute);display:block;margin-bottom:.25rem}
 input[type=text],input[type=url],input[type=date],textarea{width:100%;background:var(--deep);border:1px solid var(--line);border-radius:12px;padding:.7rem .9rem}
 textarea{min-height:80px;resize:vertical}
 input[type=file]{color:var(--mute)}
-.ev-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1rem}
-.ev{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
-.ev img{width:100%;height:160px;object-fit:cover;cursor:zoom-in}
-.ev div{padding:.9rem;display:flex;flex-direction:column;gap:.4rem;flex:1}
-.ev h4{color:var(--gold2)}
-.ev p{color:var(--mute);font-size:.95rem;line-height:1.7}
-.ev .meta{display:flex;justify-content:space-between;align-items:center;margin-top:auto;font-size:.85rem;color:var(--mute)}
+.ev-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:1rem}
+form .row>div{min-width:0}
+input[type=file]{width:100%;max-width:100%}
+.ev{min-width:0;background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+.gal{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:#000}
+.gal img{width:100%;height:72px;object-fit:cover;cursor:zoom-in;display:block}
+.gal img:first-child{grid-column:1/-1;height:170px}
+.ev .body{padding:.9rem;display:flex;flex-direction:column;gap:.5rem;flex:1;min-width:0}
+.ev h4{color:var(--gold2);overflow-wrap:anywhere}
+.ev .date{align-self:flex-start;background:rgba(212,175,95,.14);border:1px solid rgba(212,175,95,.4);color:var(--gold2);border-radius:99px;padding:.15rem .8rem;font-size:.85rem}
+.ev p{color:var(--mute);font-size:.95rem;line-height:1.7;overflow-wrap:anywhere}
+.ev .meta{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.5rem;margin-top:auto;font-size:.9rem}
 .ev a{color:var(--emerald)}
 .ev button{background:none;border:0;color:#e0626b;cursor:pointer}
+.lb{position:fixed;inset:0;background:rgba(0,0,0,.93);display:none;flex-direction:column;align-items:center;justify-content:center;gap:1rem;z-index:50;padding:1rem}
+.lb.open{display:flex}
+.lb img{max-width:100%;max-height:78vh;object-fit:contain;border-radius:12px}
+.lbbar{display:flex;gap:.7rem;align-items:center;color:var(--mute)}
 .empty{grid-column:1/-1;text-align:center;color:var(--mute);padding:2rem;border:1px dashed var(--line);border-radius:18px}
 .toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:var(--gold);color:#1a1405;padding:.7rem 1.4rem;border-radius:99px;font-weight:700;opacity:0;pointer-events:none;transition:.3s;z-index:40}
 .toast.show{opacity:1}
@@ -171,13 +180,13 @@ footer b{color:var(--gold2)}
     <div class="sh-head"><h2 id="mt"></h2><button class="x" id="close" aria-label="إغلاق">✕</button></div>
     <form id="form">
       <div class="row">
-        <div><label for="fT">عنوان الشاهد</label><input type="text" id="fT" required></div>
+        <div><label for="fT">اسم الشاهد (اختياري)</label><input type="text" id="fT" placeholder="إن تركته فارغًا يُسمّى تلقائيًا: شاهد 1، شاهد 2…"></div>
         <div><label for="fD">التاريخ</label><input type="date" id="fD"></div>
       </div>
       <div><label for="fDesc">وصف الشاهد</label><textarea id="fDesc"></textarea></div>
       <div class="row">
         <div><label for="fL">رابط (اختياري)</label><input type="url" id="fL" placeholder="https://"></div>
-        <div><label for="fI">صورة (اختياري)</label><input type="file" id="fI" accept="image/*"></div>
+        <div><label for="fI">صور الشاهد (يمكن اختيار عدة صور)</label><input type="file" id="fI" accept="image/*" multiple></div>
       </div>
       <button class="btn gold" type="submit">إضافة الشاهد</button>
     </form>
@@ -199,6 +208,10 @@ footer b{color:var(--gold2)}
 </div>
 
 <footer>إعداد وتصميم: <b>المعلم منصور عامر الرحيلي</b> · معلم العلوم</footer>
+<div class="lb" id="lb" role="dialog" aria-label="عرض الصورة">
+  <img id="lbI" alt="">
+  <div class="lbbar"><button class="btn" id="lbP">السابق</button><span id="lbC"></span><button class="btn" id="lbN">التالي</button><button class="btn" id="lbX">إغلاق</button></div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -262,17 +275,38 @@ function openSec(id){
   setTimeout(()=>$("#fT").focus(),50);
 }
 function closeM(){$("#modal").classList.remove("open");document.body.style.overflow="";render()}
+const imgsOf=e=>e.imgs||(e.img?[e.img]:[]);
+function fmtDate(d){
+  if(!d)return "";
+  try{
+    const dt=new Date(d+"T12:00:00");
+    const o={year:"numeric",month:"2-digit",day:"2-digit"};
+    const g=new Intl.DateTimeFormat("ar-SA-u-ca-gregory-nu-latn",o).format(dt);
+    const h=new Intl.DateTimeFormat("ar-SA-u-ca-islamic-umalqura-nu-latn",o).format(dt);
+    return "📅 "+h+" · "+g+"م";
+  }catch(x){return "📅 "+d}
+}
 function drawEv(){
   const arr=data[cur.id]||[];
-  $("#evs").innerHTML=arr.map((e,i)=>`<article class="ev">
-    ${e.img?`<img src="${e.img}" alt="${esc(e.t)}" onclick="zoom(${i})">`:""}
-    <div><h4>${esc(e.t)}</h4><p>${esc(e.d)}</p>
-    <div class="meta" style="padding:0"><span>${esc(e.date||"")}</span>
-    ${e.l?`<a href="${esc(e.l)}" target="_blank" rel="noopener">فتح الرابط</a>`:""}
-    <button onclick="del(${i})">حذف</button></div></div></article>`).join("")
+  $("#evs").innerHTML=arr.map((e,i)=>{
+    const im=imgsOf(e);
+    return `<article class="ev">
+    ${im.length?`<div class="gal">${im.map((u,k)=>`<img src="${u}" alt="${esc(e.t||"شاهد")}" onclick="zoom(${i},${k})">`).join("")}</div>`:""}
+    <div class="body"><h4>${esc(e.t||"شاهد")}</h4>
+    ${e.date?`<span class="date">${fmtDate(e.date)}</span>`:""}
+    ${e.d?`<p>${esc(e.d)}</p>`:""}
+    <div class="meta">${e.l?`<a href="${esc(e.l)}" target="_blank" rel="noopener">فتح الرابط</a>`:"<span></span>"}
+    <button onclick="del(${i})">حذف</button></div></div></article>`}).join("")
     ||`<div class="empty">لا توجد شواهد بعد. أضف أول شاهد من النموذج أعلاه.</div>`;
 }
-function zoom(i){const w=open();w&&(w.document.write(`<body style="margin:0;background:#000"><img src="${data[cur.id][i].img}" style="max-width:100%;display:block;margin:auto">`))}
+let lb={a:[],i:0};
+function showLb(){$("#lbI").src=lb.a[lb.i];$("#lbC").textContent=(lb.i+1)+" / "+lb.a.length;$("#lbP").hidden=$("#lbN").hidden=lb.a.length<2}
+function zoom(i,k){lb={a:imgsOf(data[cur.id][i]),i:k||0};showLb();$("#lb").classList.add("open")}
+$("#lbP").onclick=()=>{lb.i=(lb.i-1+lb.a.length)%lb.a.length;showLb()};
+$("#lbN").onclick=()=>{lb.i=(lb.i+1)%lb.a.length;showLb()};
+$("#lbX").onclick=()=>$("#lb").classList.remove("open");
+$("#lb").addEventListener("click",e=>{if(e.target.id==="lb")$("#lb").classList.remove("open")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("#lb").classList.remove("open")});
 function del(i){if(!confirm("حذف هذا الشاهد؟"))return;data[cur.id].splice(i,1);save();drawEv();toast("تم الحذف")}
 
 function shrink(file){return new Promise(res=>{
@@ -284,9 +318,11 @@ function shrink(file){return new Promise(res=>{
 
 $("#form").addEventListener("submit",async e=>{
   e.preventDefault();
-  const f=$("#fI").files[0];
-  const item={t:$("#fT").value.trim(),d:$("#fDesc").value.trim(),l:$("#fL").value.trim(),date:$("#fD").value,img:f?await shrink(f):""};
-  (data[cur.id]=data[cur.id]||[]).unshift(item);save();
+  const files=[...$("#fI").files].slice(0,12);
+  const list=(data[cur.id]=data[cur.id]||[]);
+  const imgs=(await Promise.all(files.map(shrink))).filter(Boolean);
+  const item={t:$("#fT").value.trim()||("شاهد "+(list.length+1)),d:$("#fDesc").value.trim(),l:$("#fL").value.trim(),date:$("#fD").value,imgs};
+  list.unshift(item);save();
   $("#form").reset();$("#fD").valueAsDate=new Date();drawEv();toast("تمت إضافة الشاهد");
 });
 $("#grid").addEventListener("click",e=>{const c=e.target.closest(".card");if(c)openSec(c.dataset.id)});
@@ -321,7 +357,7 @@ $("#iEdit").onclick=()=>{$("#ie").value=infoText(infoKey);$("#iv").hidden=true;$
 $("#iSave").onclick=()=>{data._info=data._info||{};data._info[infoKey]=$("#ie").value.trim()||INFO[infoKey].d;save();openInfo(infoKey);toast("تم حفظ النص")};
 
 /* رابط الداش بورد: ضع رابطك هنا، أو اضغط زر ⚙ بجانب الأيقونة */
-const DASHBOARD_URL="https://9-mns.vercel.app/";
+const DASHBOARD_URL="";
 function dashUrl(){let v=null;try{v=localStorage.getItem("rahili_dash")}catch(e){}return v||DASHBOARD_URL}
 function setDash(){
   const u=prompt("الصق رابط الداش بورد (يبدأ بـ https://)",dashUrl()||"");
