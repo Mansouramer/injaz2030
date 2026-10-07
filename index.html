@@ -43,6 +43,20 @@ button,input,textarea{font-family:inherit;font-size:1rem;color:inherit}
 .inst{display:flex;align-items:center;gap:.5rem;background:var(--deep);border:1px solid var(--emerald);color:#7be0bf;border-radius:16px;padding:.7rem 1.1rem;cursor:pointer;font-weight:700;transition:.2s}
 .inst:hover{background:var(--emerald);color:#04150f}
 .inst[hidden]{display:none}
+#req{margin-bottom:1.2rem}
+.rq-t{font-size:1.05rem;color:var(--gold2);margin-bottom:.6rem;display:flex;justify-content:space-between;gap:1rem}
+.chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:.5rem}
+.chip{display:flex;gap:.6rem;align-items:flex-start;text-align:right;background:var(--ink);border:1px dashed var(--line);border-radius:14px;padding:.6rem .8rem;cursor:pointer;min-width:0;line-height:1.5;transition:.2s}
+.chip b{flex-shrink:0;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:rgba(212,175,95,.15);color:var(--gold2);font-size:.9rem}
+.chip span{min-width:0;overflow-wrap:anywhere}
+.chip small{display:block;color:var(--mute);font-size:.8rem;margin-top:.15rem}
+.chip.ok{border:1px solid var(--emerald)}
+.chip.ok b{background:var(--emerald);color:#04150f}
+.chip:hover{border-color:var(--gold)}
+select{width:100%;background:var(--deep);border:1px solid var(--line);border-radius:12px;padding:.7rem .9rem;color:inherit;font-family:inherit;font-size:1rem}
+select option{background:var(--deep)}
+#fT{margin-top:.5rem}
+.card .bar{margin-top:.8rem;height:6px}
 /* Hero */
 .hero{display:grid;grid-template-columns:1.3fr 1fr;gap:2rem;align-items:center;max-width:1200px;margin:0 auto;padding:3rem 1.5rem 2rem}
 .badge{display:inline-block;border:1px solid var(--gold);color:var(--gold2);padding:.3rem 1rem;border-radius:99px;font-size:.95rem;margin-bottom:1rem}
@@ -124,7 +138,7 @@ footer b{color:var(--gold2)}
 
 @media(max-width:760px){.hero{grid-template-columns:1fr;text-align:center}.hero p{margin:auto}.stats{grid-template-columns:1fr}form .row{grid-template-columns:1fr}.atom{max-width:220px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-@media print{.top,.tools,.btn,.x,form,.atom{display:none!important}body{background:#fff;color:#000}.card,.ev,.sheet,.stat{background:#fff;border-color:#999;color:#000}}
+@media print{.top,.tools,.btn,.x,form,.atom,#req{display:none!important}body{background:#fff;color:#000}.card,.ev,.sheet,.stat{background:#fff;border-color:#999;color:#000}}
 </style>
 </head>
 <body>
@@ -160,7 +174,7 @@ footer b{color:var(--gold2)}
 
 <section class="stats" aria-label="ملخص">
   <div class="stat"><b id="sEv">0</b><span>إجمالي الشواهد</span></div>
-  <div class="stat"><b id="sSec">0 / 0</b><span>أقسام مكتملة (بها شاهد على الأقل)</span></div>
+  <div class="stat"><b id="sSec">0 / 0</b><span>الشواهد المطلوبة المكتملة</span></div>
   <div class="stat"><b id="sPct">0%</b><span>نسبة الإنجاز</span><div class="bar"><i id="bar"></i></div></div>
 </section>
 
@@ -178,9 +192,10 @@ footer b{color:var(--gold2)}
 <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mt">
   <div class="sheet">
     <div class="sh-head"><h2 id="mt"></h2><button class="x" id="close" aria-label="إغلاق">✕</button></div>
+    <div id="req"></div>
     <form id="form">
       <div class="row">
-        <div><label for="fT">اسم الشاهد (اختياري)</label><input type="text" id="fT" placeholder="إن تركته فارغًا يُسمّى تلقائيًا: شاهد 1، شاهد 2…"></div>
+        <div><label for="fS" id="fSl">الشاهد</label><select id="fS"></select><input type="text" id="fT" placeholder="اكتب اسم الشاهد"></div>
         <div><label for="fD">التاريخ</label><input type="date" id="fD"></div>
       </div>
       <div><label for="fDesc">وصف الشاهد</label><textarea id="fDesc"></textarea></div>
@@ -215,18 +230,19 @@ footer b{color:var(--gold2)}
 <div class="toast" id="toast"></div>
 
 <script>
+const R5=["نتائج الاختبار القبلي والبعدي","كشف متابعة الطلبة","تحليل نتائج الطلبة من نظام نور في نهاية كل فصل دراسي","استمارة خطة علاجية للطلبة الضعاف","صور لتكريم الطلبة المتميزين"];
 const SECTIONS=[
- {id:"s1",g:0,t:"أداء الواجبات الوظيفية",i:"📋"},
- {id:"s2",g:0,t:"التفاعل مع المجتمع المهني",i:"🤝"},
- {id:"s3",g:0,t:"التفاعل مع أولياء الأمور",i:"👨‍👩‍👧"},
- {id:"s4",g:0,t:"التنويع في استراتيجيات التدريس",i:"🔬"},
- {id:"s5",g:0,t:"تحسين نتائج المتعلمين",i:"📈"},
- {id:"s6",g:0,t:"إعداد وتنفيذ خطة التعلم",i:"🗂️"},
- {id:"s7",g:0,t:"توظيف تقنيات ووسائل التعلم المناسبة",i:"💻"},
- {id:"s8",g:0,t:"تهيئة بيئة تعليمية",i:"🧪"},
- {id:"s9",g:0,t:"الإدارة الصفية",i:"🏫"},
- {id:"s10",g:0,t:"تحليل نتائج المتعلمين وتشخيص مستواهم",i:"📊"},
- {id:"s11",g:0,t:"تنوع أساليب التقويم",i:"✅"},
+ {id:"s1",g:0,t:"أداء الواجبات الوظيفية",i:"📋",ev:["صورة من سجل الدوام الرسمي","صورة من سجل المناوبة والانتظار",["صورة من المشاركة في الأنشطة الوطنية","كمبادرات أو أي نشاط وطني، مثل المشاركة في البادلت الخاص بالمدرسة لليوم الوطني ويوم التأسيس"],"صورة من التوقيع على التعاميم والنشرات الخاصة بميثاق أخلاقيات المهنة",["صورة من تقرير المشاركة في الأعياد والمناسبات العامة","الأعمال التطوعية، أسبوع المرور، الدفاع المدني… إلخ"]]},
+ {id:"s2",g:0,t:"التفاعل مع المجتمع المهني",i:"🤝",ev:["سجل أو تقرير مجتمعات التعلم المهنية","سجل أو تقرير تبادل الزيارات","تقرير تنفيذ أو حضور ورشة تدريبية","تقرير تنفيذ أو حضور درس تطبيقي","شهادات حضور الدورات"]},
+ {id:"s3",g:0,t:"التفاعل مع أولياء الأمور",i:"👨‍👩‍👧",ev:[["تقرير حضور مجالس أولياء الأمور","سجل التوقيع على الحضور"],"تقرير باجتماع المعلم بولي الأمر","صور توثق إرسال الخطة الأسبوعية لأولياء الأمور",["صور من إشعار ولي الأمر بمستوى طالب في الأنشطة وغيرها","من منصة مدرستي"]]},
+ {id:"s4",g:0,t:"التنويع في استراتيجيات التدريس",i:"🔬",ev:["تقرير عن تطبيق استراتيجية","ملف إنجاز المعلم"]},
+ {id:"s5",g:0,t:"تحسين نتائج المتعلمين",i:"📈",ev:R5},
+ {id:"s6",g:0,t:"إعداد وتنفيذ خطة التعلم",i:"🗂️",ev:["خطة توزيع المنهج",["نموذج من إعداد الدروس","من تقارير منصة مدرستي"],["نماذج من الواجبات والاختبارات","ورقية أو من منصة مدرستي"],"صور من الخطط الأسبوعية"]},
+ {id:"s7",g:0,t:"توظيف تقنيات ووسائل التعلم المناسبة",i:"💻",ev:["صور من الوسائل التعليمية المستخدمة",["تقرير عن برنامج تقني تم استخدامه","مثل: السبورة الذكية، عرض الباوربوينت أثناء الدرس، ألعاب إلكترونية تعليمية، مختبرات افتراضية، تطبيقات الذكاء الاصطناعي، صورة لدرس على المنصة"],"صورة من سجل زيارة مصادر التعلم","تقرير الأنشطة والواجبات والاختبارات من منصة مدرستي"]},
+ {id:"s8",g:0,t:"تهيئة بيئة تعليمية",i:"🧪",ev:["تقرير تصنيف الطلاب وفق أنماط التعلم",["نماذج من التحفيز المادي والمعنوي","مثل: شهادات الشكر للطلاب، صورة لصفحة من كتاب مصحح وبها عبارات شكر وثناء"],"صورة للسبورة موضح بها الأهداف"]},
+ {id:"s9",g:0,t:"الإدارة الصفية",i:"🏫",ev:["نموذج لكشف المتابعة اليومي","تطبيق استراتيجيات إدارة صفية واستراتيجيات التعزيز",["تقرير تحويل طالب لوكيل المدرسة","إن وجد"]]},
+ {id:"s10",g:0,t:"تحليل نتائج المتعلمين وتشخيص مستواهم",i:"📊",ev:R5},
+ {id:"s11",g:0,t:"تنوع أساليب التقويم",i:"✅",ev:[["نماذج من الاختبارات","يتضمن أسئلة موضوعية ومقالية، والاختبارات الشفوية"],"عينة من ملفات إنجاز الطلاب",["عينة من المهام الأدائية ومشاريع الطلاب","مثل: مطويات، أوراق عمل"],"عينة من الواجبات المنزلية"]},
  {id:"s12",g:1,t:"الخطط العلاجية",i:"🩺"},
  {id:"s13",g:1,t:"الاختبارات",i:"📝"},
  {id:"s14",g:1,t:"أعمال الطلاب",i:"🎨"},
@@ -238,6 +254,9 @@ const SECTIONS=[
  {id:"s20",g:1,t:"سجل المتابعة",i:"📒"},
  {id:"s21",g:1,t:"خرائط المفاهيم",i:"🧠"}
 ];
+const nameOf=x=>Array.isArray(x)?x[0]:x;
+const evNames=s=>(s.ev||[]).map(nameOf);
+const doneNames=s=>{const h=new Set((data[s.id]||[]).map(e=>e.t));return evNames(s).filter(n=>h.has(n))};
 const GROUPS=["معايير الأداء الوظيفي","الملفات والشواهد الداعمة"];
 const KEY="rahili_science_portfolio_v1";
 let data={};try{data=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
@@ -251,29 +270,68 @@ function render(){
   const q=$("#q").value.trim();
   let html="";
   GROUPS.forEach((gt,gi)=>{
-    const list=SECTIONS.filter(s=>s.g===gi&&(!q||s.t.includes(q)||(data[s.id]||[]).some(e=>(e.t+e.d).includes(q))));
+    const list=SECTIONS.filter(s=>s.g===gi&&(!q||s.t.includes(q)||evNames(s).some(n=>n.includes(q))||(data[s.id]||[]).some(e=>(e.t+(e.d||"")).includes(q))));
     if(!list.length)return;
     html+=`<h2 class="gt">${gt}</h2>`+list.map((s,k)=>{
       const n=(data[s.id]||[]).length;
+      const tot=evNames(s).length,dn=doneNames(s).length;
+      const sub=tot?`✓ ${dn} من ${tot} شواهد مطلوبة`:(n?"عرض الشواهد وإضافة المزيد":"افتح القسم لإضافة أول شاهد");
       return `<button class="card" style="--c:${k%2?"#1aa37a":"#d4af5f"}" data-id="${s.id}">
         <span class="cnt ${n?"":"zero"}">${n}</span>
         <div class="ico">${s.i}</div><h3>${s.t}</h3>
-        <small>${n?"عرض الشواهد وإضافة المزيد":"افتح القسم لإضافة أول شاهد"}</small></button>`}).join("");
+        <small>${sub}</small>${tot?`<div class="bar"><i style="width:${Math.round(dn/tot*100)}%"></i></div>`:""}</button>`}).join("");
   });
   $("#grid").innerHTML=html||`<div class="empty">لا توجد نتائج مطابقة</div>`;
-  const total=SECTIONS.reduce((a,s)=>a+(data[s.id]||[]).length,0);
-  const done=SECTIONS.filter(s=>(data[s.id]||[]).length).length;
-  const pct=Math.round(done/SECTIONS.length*100);
-  $("#sEv").textContent=total;$("#sSec").textContent=done+" / "+SECTIONS.length;
+  const tot=SECTIONS.reduce((a,s)=>a+evNames(s).length,0);
+  const done=SECTIONS.reduce((a,s)=>a+doneNames(s).length,0);
+  const pct=tot?Math.round(done/tot*100):0;
+  $("#sEv").textContent=SECTIONS.reduce((a,s)=>a+(data[s.id]||[]).length,0);
+  $("#sSec").textContent=done+" / "+tot;
   $("#sPct").textContent=pct+"%";$("#bar").style.width=pct+"%";
 }
 function openSec(id){
   cur=SECTIONS.find(s=>s.id===id);
   $("#mt").textContent=cur.i+" "+cur.t;
   $("#form").reset();$("#fD").valueAsDate=new Date();
-  drawEv();$("#modal").classList.add("open");document.body.style.overflow="hidden";
-  setTimeout(()=>$("#fT").focus(),50);
+  buildForm();drawEv();
+  $("#modal").classList.add("open");document.body.style.overflow="hidden";
+  $("#modal").scrollTop=0;
 }
+function buildForm(){
+  const names=evNames(cur),fs=$("#fS");
+  fs.hidden=!names.length;
+  fs.innerHTML=names.length?names.map((n,k)=>`<option value="${k}">${esc(n)}</option>`).join("")+`<option value="__o">شاهد آخر (اكتب اسمه)…</option>`:"";
+  $("#fSl").textContent=names.length?"الشاهد":"اسم الشاهد (اختياري)";
+  const nx=names.findIndex(n=>!(data[cur.id]||[]).some(e=>e.t===n));
+  if(nx>=0)fs.value=nx;
+  syncS();
+}
+function syncS(){
+  const names=evNames(cur),other=!names.length||$("#fS").value==="__o";
+  $("#fT").hidden=!other;
+  $("#fT").placeholder=names.length?"اكتب اسم الشاهد":"إن تركته فارغًا يُسمّى تلقائيًا: شاهد 1، شاهد 2…";
+}
+function titleSel(list){
+  const names=evNames(cur),v=$("#fS").value;
+  if(names.length&&v!=="__o")return names[+v];
+  return $("#fT").value.trim()||("شاهد "+(list.length+1));
+}
+function buildReq(){
+  const box=$("#req"),names=evNames(cur);
+  if(!names.length){box.hidden=true;box.innerHTML="";return}
+  box.hidden=false;
+  const have=new Set((data[cur.id]||[]).map(e=>e.t));
+  box.innerHTML=`<h3 class="rq-t"><span>الشواهد المطلوبة (اضغط على الشاهد لإضافته)</span><span>${names.filter(n=>have.has(n)).length} / ${names.length}</span></h3><div class="chips">`+
+    cur.ev.map((x,k)=>{const nm=nameOf(x),h=Array.isArray(x)?x[1]:"",ok=have.has(nm);
+      return `<button type="button" class="chip ${ok?"ok":""}" data-k="${k}"><b>${ok?"✓":"＋"}</b><span>${esc(nm)}${h?`<small>${esc(h)}</small>`:""}</span></button>`}).join("")+`</div>`;
+}
+$("#req").addEventListener("click",e=>{
+  const c=e.target.closest(".chip");if(!c)return;
+  $("#fS").value=c.dataset.k;syncS();
+  $("#form").scrollIntoView({behavior:"smooth",block:"center"});
+  setTimeout(()=>$("#fI").focus(),300);
+});
+$("#fS").addEventListener("change",syncS);
 function closeM(){$("#modal").classList.remove("open");document.body.style.overflow="";render()}
 const imgsOf=e=>e.imgs||(e.img?[e.img]:[]);
 function fmtDate(d){
@@ -287,6 +345,7 @@ function fmtDate(d){
   }catch(x){return "📅 "+d}
 }
 function drawEv(){
+  buildReq();
   const arr=data[cur.id]||[];
   $("#evs").innerHTML=arr.map((e,i)=>{
     const im=imgsOf(e);
@@ -321,9 +380,9 @@ $("#form").addEventListener("submit",async e=>{
   const files=[...$("#fI").files].slice(0,12);
   const list=(data[cur.id]=data[cur.id]||[]);
   const imgs=(await Promise.all(files.map(shrink))).filter(Boolean);
-  const item={t:$("#fT").value.trim()||("شاهد "+(list.length+1)),d:$("#fDesc").value.trim(),l:$("#fL").value.trim(),date:$("#fD").value,imgs};
+  const item={t:titleSel(list),d:$("#fDesc").value.trim(),l:$("#fL").value.trim(),date:$("#fD").value,imgs};
   list.unshift(item);save();
-  $("#form").reset();$("#fD").valueAsDate=new Date();drawEv();toast("تمت إضافة الشاهد");
+  $("#form").reset();$("#fD").valueAsDate=new Date();buildForm();drawEv();toast("تمت إضافة الشاهد");
 });
 $("#grid").addEventListener("click",e=>{const c=e.target.closest(".card");if(c)openSec(c.dataset.id)});
 $("#close").onclick=closeM;
