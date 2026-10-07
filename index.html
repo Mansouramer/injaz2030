@@ -321,7 +321,7 @@ $("#iEdit").onclick=()=>{$("#ie").value=infoText(infoKey);$("#iv").hidden=true;$
 $("#iSave").onclick=()=>{data._info=data._info||{};data._info[infoKey]=$("#ie").value.trim()||INFO[infoKey].d;save();openInfo(infoKey);toast("تم حفظ النص")};
 
 /* رابط الداش بورد: ضع رابطك هنا، أو اضغط زر ⚙ بجانب الأيقونة */
-const DASHBOARD_URL="";
+const DASHBOARD_URL="https://9-mns.vercel.app/";
 function dashUrl(){let v=null;try{v=localStorage.getItem("rahili_dash")}catch(e){}return v||DASHBOARD_URL}
 function setDash(){
   const u=prompt("الصق رابط الداش بورد (يبدأ بـ https://)",dashUrl()||"");
