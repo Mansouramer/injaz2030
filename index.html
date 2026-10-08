@@ -30,6 +30,7 @@ button,input,textarea{font-family:inherit;font-size:1rem;color:inherit}
 .dash{display:flex;align-items:center;gap:.6rem;background:linear-gradient(135deg,var(--gold2),var(--gold) 60%,#b8923f);color:#1a1405;border:0;border-radius:16px;padding:.7rem 1.3rem;cursor:pointer;font-weight:800;font-size:1.1rem;box-shadow:0 8px 24px -10px rgba(212,175,95,.8);transition:transform .2s}
 .dash:hover{transform:translateY(-2px)}
 .dash span{font-size:1.4rem}
+.dash.smp{background:linear-gradient(135deg,#7be0bf,var(--emerald) 60%,#117a5a);color:#04150f;box-shadow:0 8px 24px -10px rgba(26,163,122,.8)}
 .dset{background:none;border:1px solid var(--line);border-radius:12px;width:40px;height:40px;cursor:pointer;color:var(--mute)}
 .dset:hover{border-color:var(--gold);color:var(--gold2)}
 .qi{display:flex;align-items:center;gap:.6rem;background:var(--deep);border:1px solid var(--line);border-radius:16px;padding:.5rem 1rem .5rem 1.1rem;cursor:pointer;font-weight:700;transition:.2s}
@@ -144,8 +145,10 @@ footer b{color:var(--gold2)}
 <body>
 
 <nav class="top" aria-label="التنقل السريع">
-  <button class="dash" id="dash" title="فتح الداش بورد"><span>🧭</span>الداش بورد</button>
-  <button class="dset" id="dashSet" title="تغيير رابط الداش بورد" aria-label="تغيير رابط الداش بورد">⚙</button>
+  <button class="dash" id="dash" title="فتح سجل المتابعة"><span>🧭</span>سجل المتابعة</button>
+  <button class="dset" id="dashSet" title="تغيير رابط سجل المتابعة" aria-label="تغيير رابط سجل المتابعة">⚙</button>
+  <button class="dash smp" id="smp" title="فتح نماذج الشواهد"><span>🗂️</span>نماذج شواهد</button>
+  <button class="dset" id="smpSet" title="تغيير رابط نماذج الشواهد" aria-label="تغيير رابط نماذج الشواهد">⚙</button>
   <button class="inst" id="inst" title="تثبيت التطبيق على الشاشة الرئيسية">📲 تثبيت التطبيق</button>
   <button class="qi" data-info="vision"><i>👁️</i>الرؤية</button>
   <button class="qi" data-info="mission"><i>🎯</i>الرسالة</button>
@@ -415,19 +418,24 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")closeInfo()});
 $("#iEdit").onclick=()=>{$("#ie").value=infoText(infoKey);$("#iv").hidden=true;$("#ie").hidden=false;$("#iEdit").hidden=true;$("#iSave").hidden=false;$("#ie").focus()};
 $("#iSave").onclick=()=>{data._info=data._info||{};data._info[infoKey]=$("#ie").value.trim()||INFO[infoKey].d;save();openInfo(infoKey);toast("تم حفظ النص")};
 
-/* رابط الداش بورد: ضع رابطك هنا، أو اضغط زر ⚙ بجانب الأيقونة */
-const DASHBOARD_URL="";
-function dashUrl(){let v=null;try{v=localStorage.getItem("rahili_dash")}catch(e){}return v||DASHBOARD_URL}
-function setDash(){
-  const u=prompt("الصق رابط الداش بورد (يبدأ بـ https://)",dashUrl()||"");
+/* الروابط العلوية: يمكنك وضع الرابط مباشرة في url أو الضغط على ⚙ */
+const LINKS={
+  dash:{key:"rahili_dash",url:"",label:"سجل المتابعة"},
+  smp:{key:"rahili_samples",url:"",label:"نماذج الشواهد"}
+};
+function getLink(n){let v=null;try{v=localStorage.getItem(LINKS[n].key)}catch(e){}return v||LINKS[n].url}
+function setLink(n){
+  const u=prompt("الصق رابط "+LINKS[n].label+" (يبدأ بـ https://)",getLink(n)||"");
   if(!u)return "";
   const t=u.trim();
   if(!/^https?:\/\//i.test(t)){toast("الرابط غير صالح");return ""}
-  try{localStorage.setItem("rahili_dash",t)}catch(e){}
+  try{localStorage.setItem(LINKS[n].key,t)}catch(e){}
   toast("تم حفظ الرابط");return t;
 }
-$("#dash").onclick=()=>{const u=dashUrl()||setDash();if(u)window.open(u,"_blank","noopener")};
-$("#dashSet").onclick=setDash;
+["dash","smp"].forEach(n=>{
+  $("#"+n).onclick=()=>{const u=getLink(n)||setLink(n);if(u)window.open(u,"_blank","noopener")};
+  $("#"+n+"Set").onclick=()=>setLink(n);
+});
 /* تثبيت التطبيق (PWA) */
 let deferred=null;
 const standalone=()=>matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
