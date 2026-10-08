@@ -326,13 +326,13 @@ function buildReq(){
   const have=new Set((data[cur.id]||[]).map(e=>e.t));
   box.innerHTML=`<h3 class="rq-t"><span>الشواهد المطلوبة (اضغط على الشاهد لإضافته)</span><span>${names.filter(n=>have.has(n)).length} / ${names.length}</span></h3><div class="chips">`+
     cur.ev.map((x,k)=>{const nm=nameOf(x),h=Array.isArray(x)?x[1]:"",ok=have.has(nm);
-      return `<button type="button" class="chip ${ok?"ok":""}" data-k="${k}"><b>${ok?"✓":"＋"}</b><span>${esc(nm)}${h?`<small>${esc(h)}</small>`:""}</span></button>`}).join("")+`</div>`;
+      return `<button type="button" class="chip ${ok?"ok":""}" data-k="${k}"><b>${ok?"✓":"＋"}</b><span>${esc(nm)}${h?`<small>${esc(h)}</small>`:""}</span></button>`}).join("")+`<button type="button" class="chip" data-k="__o"><b>＋</b><span>شاهد آخر<small>أضف شاهدًا باسم تكتبه أنت</small></span></button></div>`;
 }
 $("#req").addEventListener("click",e=>{
   const c=e.target.closest(".chip");if(!c)return;
   $("#fS").value=c.dataset.k;syncS();
   $("#form").scrollIntoView({behavior:"smooth",block:"center"});
-  setTimeout(()=>$("#fI").focus(),300);
+  setTimeout(()=>(c.dataset.k==="__o"?$("#fT"):$("#fI")).focus(),300);
 });
 $("#fS").addEventListener("change",syncS);
 function closeM(){$("#modal").classList.remove("open");document.body.style.overflow="";render()}
